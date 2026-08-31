@@ -89,7 +89,7 @@ export function ChatSidebar({
           {!isCollapsed && (
             <div className="flex items-center gap-2">
               <BookOpen className="h-5 w-5 text-sidebar-primary" />
-              <span className="font-semibold text-sidebar-foreground">TRA AI</span>
+              <span className="font-semibold text-sidebar-foreground">TR Agent</span>
             </div>
           )}
           <Tooltip>

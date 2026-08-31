@@ -1,4 +1,5 @@
 import { OpenRouter } from "@openrouter/sdk"
+import type { ChatMessageContentItem, Message } from "@openrouter/sdk/models"
 import { getKnowledgeBaseContext, searchKnowledgeBase } from "@/lib/knowledge-base"
 import { DEFAULT_MODEL_ID } from "@/lib/models"
 
@@ -31,13 +32,15 @@ KNOWLEDGE BASE:
 ${getKnowledgeBaseContext()}`
 
 // Convert data URL or URL to OpenRouter vision format
-function parseImageData(imageUrl: string): { type: "image_url"; image_url: { url: string } } | null {
+function parseImageData(imageUrl: string): ChatMessageContentItem | null {
   try {
     // Support data URLs and regular URLs
     if (imageUrl.startsWith("data:") || imageUrl.startsWith("http")) {
       return {
         type: "image_url",
-        image_url: { url: imageUrl },
+        // The SDK converts this camelCase property to OpenRouter's image_url
+        // field when it serializes the request.
+        imageUrl: { url: imageUrl },
       }
     }
     return null
@@ -51,12 +54,12 @@ function parseImageData(imageUrl: string): { type: "image_url"; image_url: { url
 function buildMessageContent(
   content: string,
   images?: string[]
-): string | Array<{ type: string; text?: string; image_url?: { url: string } }> {
+): string | ChatMessageContentItem[] {
   if (!images || images.length === 0) {
     return content
   }
 
-  const messageContent: Array<{ type: string; text?: string; image_url?: { url: string } }> = [
+  const messageContent: ChatMessageContentItem[] = [
     {
       type: "text",
       text: content,
@@ -77,26 +80,44 @@ function buildMessageContent(
 export async function POST(request: Request) {
   try {
     const { messages, query } = await request.json()
+    const incomingMessages = Array.isArray(messages) ? messages : []
 
     // Search for relevant sources
-    const sources = searchKnowledgeBase(query || messages[messages.length - 1]?.content || "")
+    const sources = searchKnowledgeBase(query || incomingMessages[incomingMessages.length - 1]?.content || "")
     const retrievedPolicy = sources.length
       ? `\n\nRETRIEVED POLICY EXCERPTS (prioritize these when answering):\n${sources.map(source => `[${source.documentId}] ${source.title}\n${source.content}`).join("\n\n")}`
       : ""
 
     // Build the conversation history for the API with image support
-    const conversationMessages = [
+    const conversationMessages: Message[] = [
       { role: "system" as const, content: `${SYSTEM_PROMPT}${retrievedPolicy}` },
-      ...messages.map((msg: { role: string; content: string; images?: string[] }) => ({
-        role: msg.role as "user" | "assistant",
-        content: buildMessageContent(msg.content, msg.images),
-      })),
+      ...incomingMessages.flatMap((msg: { role?: unknown; content?: unknown; images?: unknown }): Message[] => {
+        const content = typeof msg.content === "string" ? msg.content : ""
+
+        if (msg.role === "user") {
+          return [{
+            role: "user" as const,
+            content: buildMessageContent(
+              content,
+              Array.isArray(msg.images) ? msg.images.filter((image): image is string => typeof image === "string") : undefined
+            ),
+          }]
+        }
+
+        // Assistant history is text-only. Images are only valid as user input
+        // for this application and should never be forwarded as assistant data.
+        if (msg.role === "assistant") {
+          return [{ role: "assistant" as const, content }]
+        }
+
+        return []
+      }),
     ]
 
     // Stream the response using Mistral model
     const stream = await openrouter.chat.send({
       model: DEFAULT_MODEL_ID,
-      messages: conversationMessages as any,
+      messages: conversationMessages,
       stream: true,
     })
 

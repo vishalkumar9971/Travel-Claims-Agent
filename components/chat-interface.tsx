@@ -242,7 +242,7 @@ export function ChatInterface({ chat, onChatUpdate, onClaimCreated }: ChatInterf
                 />
               </div>
               <h2 className="text-2xl font-bold text-foreground">
-                HCL Tech Travel Reimbursement Assistant
+                Travel Reimbursement Assistant
               </h2>
               <p className="text-muted-foreground">
                 Ask me anything about HCL Tech travel policies, reimbursement procedures, and expense guidelines.
