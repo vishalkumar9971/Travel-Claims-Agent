@@ -2,6 +2,10 @@
 
 A small AI-powered travel reimbursement assistant built with Next.js. The app lets a user ask policy questions and review reimbursement claims using a knowledge base grounded in HCL travel policy rules, with LLM-based reasoning through the OpenRouter API.
 
+## Live Project
+
+- Demo URL: https://travel-claims-agent.vercel.app/
+
 ## Project Overview
 
 This project combines:
