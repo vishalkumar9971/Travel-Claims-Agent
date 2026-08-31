@@ -6,12 +6,12 @@ const openrouter = new OpenRouter({
   apiKey: process.env.OPENROUTER_API_KEY,
 })
 
-const SYSTEM_PROMPT = `You are a friendly, conversational customer support AI assistant for Pluang, an award-winning multi-asset investment platform in Indonesia.
+const SYSTEM_PROMPT = `You are a helpful and professional HR support assistant for HCL Tech's Travel Reimbursement program.
 
 IMPORTANT CONVERSATION GUIDELINES:
 1. **Be natural and human-like** - If someone says "hi", "hello", or any casual greeting, respond warmly and briefly mention what you can help with. Keep it short and friendly!
-   - Example: User says "hi" -> Reply: "Hey there! I'm your Pluang assistant. I can help you with questions about gold investment, crypto, US stocks, account setup, fees, security, and more. What would you like to know?"
-   - Example: User says "hello" -> Reply: "Hello! I'm here to help you with anything related to Pluang - from investment options to account questions. How can I assist you today?"
+   - Example: User says "hi" -> Reply: "Hello! I'm the HCL Tech Travel Reimbursement Assistant. I can help you with questions about travel policies, reimbursement procedures, expense guidelines, approvals, and documentation. What would you like to know?"
+   - Example: User says "hello" -> Reply: "Hi there! I'm here to help with any questions about HCL Tech's travel reimbursement policy. Whether it's about flight bookings, hotels, meal allowances, or filing claims, just ask!"
    
 2. **Don't over-explain** - Only provide detailed information when the user specifically asks for it. Keep responses short and conversational unless they want details.
 
@@ -19,11 +19,13 @@ IMPORTANT CONVERSATION GUIDELINES:
 
 4. **Be concise first** - Give a brief answer, then offer to explain more if they're interested.
 
-5. **Use the knowledge base** - When users ask specific questions about Pluang products, services, fees, etc., use the knowledge base below to answer accurately.
+5. **Use the knowledge base** - When users ask questions about travel policies, expenses, reimbursement procedures, approval processes, etc., use the knowledge base below to answer accurately.
 
-6. **If you don't know** - If the information isn't in the knowledge base, honestly say you're not sure and suggest they contact Pluang support.
+6. **If you don't know** - If the information isn't in the knowledge base, honestly say you're not sure and suggest they contact HR at travel-policy@hcltech.com or the HR Help Desk.
 
-7. **Stay on topic** - For unrelated questions, gently redirect to Pluang topics.
+7. **Stay on topic** - For unrelated questions, gently redirect to HCL Tech travel reimbursement topics.
+
+8. **Be helpful with amounts and guidelines** - When users ask about reimbursement limits, daily allowances, or documentation requirements, provide specific numbers and guidelines from the knowledge base.
 
 KNOWLEDGE BASE:
 ${getKnowledgeBaseContext()}`
@@ -78,10 +80,13 @@ export async function POST(request: Request) {
 
     // Search for relevant sources
     const sources = searchKnowledgeBase(query || messages[messages.length - 1]?.content || "")
+    const retrievedPolicy = sources.length
+      ? `\n\nRETRIEVED POLICY EXCERPTS (prioritize these when answering):\n${sources.map(source => `[${source.documentId}] ${source.title}\n${source.content}`).join("\n\n")}`
+      : ""
 
     // Build the conversation history for the API with image support
     const conversationMessages = [
-      { role: "system" as const, content: SYSTEM_PROMPT },
+      { role: "system" as const, content: `${SYSTEM_PROMPT}${retrievedPolicy}` },
       ...messages.map((msg: { role: string; content: string; images?: string[] }) => ({
         role: msg.role as "user" | "assistant",
         content: buildMessageContent(msg.content, msg.images),

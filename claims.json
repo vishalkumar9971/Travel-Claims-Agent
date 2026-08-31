@@ -1,0 +1,153 @@
+[
+  {
+    "claim_id": "CLM-001",
+    "employee": "A. Rivera",
+    "purpose": "Attend 2-day industry conference (business)",
+    "trip_start_date": "2026-06-10",
+    "trip_end_date": "2026-06-12",
+    "submitted_date": "2026-06-20",
+    "total_claimed": 1110.0,
+    "line_items": [
+      {
+        "category": "airfare",
+        "description": "Round-trip economy airfare",
+        "amount": 420.0,
+        "receipt_attached": true,
+        "nights_or_days": null,
+        "rate_per_unit": null
+      },
+      {
+        "category": "lodging",
+        "description": "Hotel, 2 nights @ $180",
+        "amount": 360.0,
+        "receipt_attached": true,
+        "nights_or_days": 2,
+        "rate_per_unit": 180.0
+      },
+      {
+        "category": "meals",
+        "description": "Meals, 3 days @ ~$60/day",
+        "amount": 180.0,
+        "receipt_attached": true,
+        "nights_or_days": 3,
+        "rate_per_unit": 60.0
+      },
+      {
+        "category": "conference_fees",
+        "description": "Conference registration",
+        "amount": 150.0,
+        "receipt_attached": true,
+        "nights_or_days": null,
+        "rate_per_unit": null
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-002",
+    "employee": "B. Osei",
+    "purpose": "Weekend hotel stay",
+    "trip_start_date": "2026-06-14",
+    "trip_end_date": "2026-06-15",
+    "submitted_date": "2026-06-25",
+    "total_claimed": 380.0,
+    "line_items": [
+      {
+        "category": "spa",
+        "description": "Hotel spa package",
+        "amount": 300.0,
+        "receipt_attached": true,
+        "nights_or_days": null,
+        "rate_per_unit": null
+      },
+      {
+        "category": "minibar",
+        "description": "In-room minibar",
+        "amount": 80.0,
+        "receipt_attached": true,
+        "nights_or_days": null,
+        "rate_per_unit": null
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-003",
+    "employee": "C. Nakamura",
+    "purpose": "Client site visit (business)",
+    "trip_start_date": "2026-06-08",
+    "trip_end_date": "2026-06-10",
+    "submitted_date": "2026-06-22",
+    "total_claimed": 940.0,
+    "line_items": [
+      {
+        "category": "airfare",
+        "description": "Round-trip economy airfare",
+        "amount": 300.0,
+        "receipt_attached": true,
+        "nights_or_days": null,
+        "rate_per_unit": null
+      },
+      {
+        "category": "lodging",
+        "description": "Hotel, 2 nights @ $250",
+        "amount": 500.0,
+        "receipt_attached": true,
+        "nights_or_days": 2,
+        "rate_per_unit": 250.0
+      },
+      {
+        "category": "meals",
+        "description": "Meals, 2 days @ $70/day",
+        "amount": 140.0,
+        "receipt_attached": true,
+        "nights_or_days": 2,
+        "rate_per_unit": 70.0
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-004",
+    "employee": "D. Fischer",
+    "purpose": "International vendor negotiation (business)",
+    "trip_start_date": "2026-06-16",
+    "trip_end_date": "2026-06-18",
+    "submitted_date": "2026-06-28",
+    "total_claimed": 3000.0,
+    "line_items": [
+      {
+        "category": "airfare",
+        "description": "Business-class international airfare",
+        "amount": 2400.0,
+        "receipt_attached": true,
+        "nights_or_days": null,
+        "rate_per_unit": null
+      },
+      {
+        "category": "lodging",
+        "description": "Hotel, 3 nights",
+        "amount": 600.0,
+        "receipt_attached": false,
+        "nights_or_days": 3,
+        "rate_per_unit": 200.0
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-005",
+    "employee": "E. Haddad",
+    "purpose": "Client dinner / business development",
+    "trip_start_date": "2026-06-11",
+    "trip_end_date": "2026-06-11",
+    "submitted_date": "2026-06-24",
+    "total_claimed": 220.0,
+    "line_items": [
+      {
+        "category": "meals",
+        "description": "Client dinner for 4 (business development)",
+        "amount": 220.0,
+        "receipt_attached": false,
+        "nights_or_days": 1,
+        "rate_per_unit": 220.0
+      }
+    ]
+  }
+]

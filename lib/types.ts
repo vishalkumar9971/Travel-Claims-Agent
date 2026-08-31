@@ -22,6 +22,39 @@ export interface Chat {
   updatedAt: number
 }
 
+export type ClaimStatus = "approved" | "manual_review" | "rejected"
+
+export interface ClaimExpense {
+  category: string
+  description: string
+  date: string
+  units: number
+  rate: number
+  amount: number
+  receiptAttached: boolean
+}
+
+export interface ClaimRecord {
+  claimId: string
+  employeeName: string
+  employeeContact: string
+  department: string
+  purpose: string
+  startDate: string
+  endDate: string
+  destination: string
+  submissionDate: string
+  expenses: ClaimExpense[]
+  total: number
+  reimbursable: number
+  ticketId?: string
+  agentStatus: ClaimStatus
+  agentAction: string
+  reviewerAction: string
+  rejectionReasons: string[]
+  createdAt: number
+}
+
 export interface Document {
   id: string
   title: string

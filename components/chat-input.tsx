@@ -5,15 +5,18 @@ import React from "react"
 import { useState, useRef, KeyboardEvent } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { Send, Loader2, Image as ImageIcon, X } from "lucide-react"
+import { Send, Loader2, Image as ImageIcon, X, ClipboardPlus, CircleHelp } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 interface ChatInputProps {
   onSend: (message: string, images: string[]) => void
   isLoading?: boolean
   disabled?: boolean
+  onSubmitClaim: () => void
+  onCheckClaimStatus: () => void
 }
 
-export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
+export function ChatInput({ onSend, isLoading, disabled, onSubmitClaim, onCheckClaimStatus }: ChatInputProps) {
   const [message, setMessage] = useState("")
   const [images, setImages] = useState<string[]>([])
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -71,7 +74,7 @@ export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
   }
 
   return (
-    <div className="border-t border-border bg-background p-4">
+    <div className=" border-border bg-background p-4">
       <div className="mx-auto max-w-3xl">
         {/* Image preview grid */}
         {images.length > 0 && (
@@ -117,6 +120,11 @@ export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
             <ImageIcon className="h-4 w-4" />
           </Button>
 
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild><Button size="icon" variant="ghost" className="h-9 w-9 shrink-0 rounded-xl text-muted-foreground hover:text-foreground" disabled={isLoading || disabled} type="button"><ClipboardPlus className="h-4 w-4" /><span className="sr-only">Claim actions</span></Button></DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-52"><DropdownMenuItem onSelect={onSubmitClaim}><ClipboardPlus /> Submit a claim</DropdownMenuItem><DropdownMenuItem onSelect={onCheckClaimStatus}><CircleHelp /> Check status of claim</DropdownMenuItem></DropdownMenuContent>
+          </DropdownMenu>
+
           {/* Text input */}
           <textarea
             ref={textareaRef}
@@ -148,7 +156,7 @@ export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
         </div>
 
         <p className="mt-2 text-center text-xs text-muted-foreground">
-          KB Copilot searches our knowledge base to provide source-backed answers. {images.length > 0 && `${images.length} image(s) attached.`}
+          TRA searches our knowledge base to provide source-backed answers. {images.length > 0 && `${images.length} image(s) attached.`}
         </p>
       </div>
     </div>

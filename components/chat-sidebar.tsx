@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Chat } from "@/lib/types"
+import { Chat, ClaimRecord } from "@/lib/types"
+import { ClaimsPanel } from "@/components/claims-panel"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
@@ -19,6 +20,7 @@ import {
   ChevronLeft,
   ChevronRight,
   BookOpen,
+  ClipboardList,
 } from "lucide-react"
 
 const MAX_RECENT_CHATS = 12
@@ -32,6 +34,7 @@ interface ChatSidebarProps {
   isCollapsed: boolean
   onToggleCollapse: () => void
   onOpenHistory: () => void
+  claims: ClaimRecord[]
 }
 
 export function ChatSidebar({
@@ -43,8 +46,10 @@ export function ChatSidebar({
   isCollapsed,
   onToggleCollapse,
   onOpenHistory,
+  claims,
 }: ChatSidebarProps) {
   const [hoveredChat, setHoveredChat] = useState<string | null>(null)
+  const [claimsOpen, setClaimsOpen] = useState(false)
 
   // Only show the 12 most recent chats
   const recentChats = chats.slice(0, MAX_RECENT_CHATS)
@@ -84,7 +89,7 @@ export function ChatSidebar({
           {!isCollapsed && (
             <div className="flex items-center gap-2">
               <BookOpen className="h-5 w-5 text-sidebar-primary" />
-              <span className="font-semibold text-sidebar-foreground">Pluang Copilot</span>
+              <span className="font-semibold text-sidebar-foreground">TRA AI</span>
             </div>
           )}
           <Tooltip>
@@ -122,6 +127,10 @@ export function ChatSidebar({
             {isCollapsed && (
               <TooltipContent side="right">New Chat</TooltipContent>
             )}
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild><Button variant="outline" onClick={() => setClaimsOpen(true)} className={cn("mt-2 w-full justify-start gap-2", isCollapsed && "justify-center px-0")}><ClipboardList className="h-4 w-4" />{!isCollapsed && <span>Claims {claims.length ? `(${claims.length})` : ""}</span>}</Button></TooltipTrigger>
+            {isCollapsed && <TooltipContent side="right">Claims</TooltipContent>}
           </Tooltip>
         </div>
 
@@ -190,7 +199,7 @@ export function ChatSidebar({
                       onMouseEnter={() => setHoveredChat(chat.id)}
                       onMouseLeave={() => setHoveredChat(null)}
                     >
-                      <MessageSquare className="h-4 w-4 shrink-0" />
+                      {/* <MessageSquare className="h-4 w-4 shrink-0" /> */}
                       {!isCollapsed && (
                         <>
                           <span className="flex-1 min-w-0 text-sm line-clamp-2 break-words pr-8">
@@ -242,6 +251,7 @@ export function ChatSidebar({
             </div>
           )}
         </ScrollArea>
+        <ClaimsPanel open={claimsOpen} onOpenChange={setClaimsOpen} claims={claims} />
       </div>
     </TooltipProvider>
   )

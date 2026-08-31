@@ -1,0 +1,213 @@
+## GenAI Developer Candidate Assignment: Travel Reimbursement
+
+---
+
+### 1. Assignment Overview
+
+Build a working prototype of a Travel Reimbursement Approval Agent. The agent should accept a claim, use policy/rule context and tools, and produce a clear decision such as **Approve**, **Partially Approve**, **Reject**, or **Manual Review**. The emphasis is on clean implementation, GenAI reasoning, tool usage, and reliability in ambiguous cases.
+
+---
+
+### 2. Scope and Constraints
+
+* Keep the solution practical and lightweight; do not build a production-grade enterprise system.
+* Use Python, JavaScript/TypeScript, or another language you are comfortable with.
+* You may use LangChain, LlamaIndex, Semantic Kernel, CrewAI, AutoGen, direct LLM APIs, or an equivalent lightweight approach.
+* Use the policy in Appendix A and the sample claims in Appendix B (below); do not invent your own claim set. No real employee or company data should be used.
+* Deliver your solution as a single Jupyter notebook so the demo is easy to run and review end-to-end.
+
+---
+
+### 3. Minimum Functional Expectations
+
+* **Claim Intake:** Accept a reimbursement claim from JSON, CSV, form input, or API request.
+* **Context grounding:** Retrieve or reference relevant policy/rule context before making a decision.
+* **Tool/function usage:** Use at least two meaningful tools or functions, such as policy lookup, receipt completeness check, per-diem/limit checker, duplicate detector, approval threshold check, or output validator.
+* **GenAI/Agentic workflow:** Show how the LLM decides when to use tools, combines results, and handles missing or conflicting information.
+* **Structured output:** In the final code cell, output a JSON array with one object per provided claim, each containing exactly: `claim_id`, `decision` (one of `APPROVE`, `PARTIAL_APPROVE`, `REJECT`, `MANUAL_REVIEW`), `approved_amount`, `deducted_amount`, `missing_docs`, `policy_refs`, `confidence`, `explanation`, and `tools_used`.
+* **Manual review handling:** Route uncertain, incomplete, or policy-exception cases to Manual Review rather than forcing a decision.
+* **Results dashboard:** Include a minimal, data-driven dashboard summarizing your results (for example, a decision breakdown or approved vs deducted amounts), derived from the actual claim outcomes.
+
+---
+
+### 4. Provided Inputs
+
+* The travel reimbursement policy — see Appendix A. Every rule has a stable id (`POL-*`) you can cite in your output.
+* A small limit table, approval matrix, or category eligibility file.
+* The five sample claims to evaluate — see Appendix B. Return one result object for each of the five claims.
+* Optional mock receipts or receipt metadata, such as date, amount, category, vendor, and attachment status.
+
+---
+
+### 5. Deliverables
+
+* **Runnable notebook:** A single Jupyter notebook named `yourname.ipynb` that runs top-to-bottom without manual steps.
+* **Structured results cell:** The final code cell outputs the JSON results for all provided claims (fields as listed in section 3).
+* **Design notes & reasoning:** A markdown section titled "Design Notes & Reasoning" covering your assumptions, trade-offs, why you route certain cases to Manual Review, and what you would improve next.
+* **User Interface:** A minimal results interface, saved as `UI_SS_1.png` (optionally `UI_SS_2.png`) next to the notebook, or rendered inline under a "`## Dashboard`" heading. This UI will be the means by which the user interacts with notebook code.
+* **README:** Setup steps, required environment variables, how to run the demo, and key design choices. (should be part of notebook only)
+* **Sample outputs:** At least three example claims with generated decisions and explanations as part of the notebook.
+* **Demo evidence:** Screenshots, API responses, notebook output, or a short walkthrough. Be prepared to demonstrate the prototype during the interview.
+* **Assumptions and limitations:** Briefly list assumptions, simplifications, known gaps, and what you would improve next.
+* Please submit your completed assignment using this form — make sure to include your GitHub repository link: [Case Study Submission](https://example.com).
+
+> **NOTE:** Single Notebook uploaded on github with working repo (Shareable link) is the only deliverable (`namesurname.ipynb`) we will assess. Please ensure that the repository is publicly accessible.
+
+---
+
+### 6. Evaluation Criteria
+
+* Hands-on implementation quality: runnable, understandable, and reasonably organized code.
+* Practical use of GenAI and Agentic AI: tool calling, workflow control, prompting, and context handling.
+* Business correctness: sensible reimbursement decisions grounded in policy/rule context.
+* Reliability: structured outputs, validation, fallbacks, and manual review for uncertain cases.
+* Developer judgement: clear trade-offs, simple design, and avoidable over-engineering removed.
+
+---
+
+### 7. Optional Enhancements
+
+* Simple UI or chatbot interface.
+* Audit trail showing retrieved context, tools called, and intermediate checks.
+* Basic test cases or evaluation script for sample claims.
+* Confidence score or reason codes for manual review.
+* MCP-based tool integration, if you are comfortable implementing it within the timebox.
+
+*Submission guidance: This assignment is intentionally timeboxed to 2–3 days. A small, working, well-explained prototype is preferred over a broad but fragile implementation.*
+
+---
+
+## Appendix A — Travel Reimbursement Policy
+
+*Mock policy for this assignment. No real company or employee data. Every rule has a stable id (`POL-*`) you should cite in your output where relevant.*
+
+### 1. Eligible & Ineligible Categories
+
+* **POL-CAT-01 — Eligible categories — Reimbursable when incurred for a documented business purpose:**
+* Airfare (economy class only — see POL-AIR-01)
+* Lodging (hotel room charges)
+* Meals (subject to per-diem limits — see POL-PD-01)
+* Ground transport (taxi, rideshare, train, rental car, parking)
+* Conference / registration fees
+
+
+* **POL-CAT-02 — Ineligible items — Never reimbursable; rejected (deducted in full):**
+* Alcohol and minibar charges
+* Spa, gym, and personal entertainment
+* In-room movies, personal shopping, gifts
+* Traffic fines, penalties, and late fees
+* Any personal (non-business) expense
+
+
+
+### 2. Per-Diem & Category Limits
+
+* **POL-PD-01 — Meals** — Maximum $75 per day. Amounts above the daily cap are deducted; the rest is reimbursed.
+* **POL-PD-02 — Lodging** — Maximum $200 per night. Amounts above the nightly cap are deducted; the rest is reimbursed.
+* **POL-PD-03 — Ground transport** — Maximum $50 per day. Amounts above the cap are deducted.
+* **POL-AIR-01 — Airfare class** — Only economy class airfare is reimbursable. Business/first-class fares are a policy exception and must be routed to Manual Review (not auto-deducted, because a pre-approval may exist).
+
+### 3. Receipt Rules
+
+* **POL-RCT-01 — Receipt required above $25** — Any single line item greater than $25 requires an attached, itemized receipt. Airfare and lodging always require a receipt regardless of amount.
+* **POL-RCT-02 — Missing receipt handling** — If a receipt is missing for an item that requires one, the item is not silently rejected — the claim is routed to Manual Review so the reviewer can request the receipt.
+
+### 4. Approval Thresholds
+
+*Thresholds are evaluated on the total reimbursable amount (after per-diem deductions but before final decision).*
+
+* **POL-APR-01 — Auto-approve tier** — Total $\le$ $500: may be auto-approved by the agent if fully compliant.
+* **POL-APR-02 — Manager tier** — Total > $500 and $\le$ $2,000: eligible for approval, treated as approvable when fully compliant.
+* **POL-APR-03 — Director / Manual-Review tier** — Total > $2,000: exceeds the agent's auto-approval authority and must be routed to Manual Review (director approval required), even if otherwise compliant.
+
+### 5. Timeliness
+
+* **POL-TIME-01 — Submission window** — Claims must be submitted within 30 days of the expense date. Late claims are routed to Manual Review.
+
+### Decision Guidance (how the rules combine)
+
+* **Approve** — every item eligible, all receipts present, all within per-diem, total within an approvable tier (POL-APR-01 / POL-APR-02).
+* **Partially Approve** — the claim is valid but some amounts exceed per-diem caps; reimburse up to the cap and deduct the excess.
+* **Reject** — the claimed items are ineligible (POL-CAT-02) with nothing reimbursable.
+* **Manual Review** — any ambiguity, policy exception, high value (POL-APR-03), missing required receipt (POL-RCT-02), or conflicting information. Prefer Manual Review over forcing a decision.
+
+---
+
+## Appendix B — Sample Claims to Evaluate
+
+*Evaluate all 5 claims below against the policy in Appendix A. Return one result object per claim using the fields defined in Section 3. Currency: USD.*
+
+### CLM-001 — Attend 2-day industry conference (business)
+
+* **Employee:** A. Rivera
+* **Trip:** 2026-06-10 to 2026-06-12
+* **Submitted:** 2026-06-20
+
+| Category | Description | Amount (USD) | Receipt attached |
+| --- | --- | --- | --- |
+| airfare | Round-trip economy airfare | 420.00 | Yes |
+| lodging | Hotel, 2 nights @ $180 | 360.00 | Yes |
+| meals | Meals, 3 days @ ~$60/day | 180.00 | Yes |
+| conference_fees | Conference registration | 150.00 | Yes |
+
+* **Total claimed:** $1110.00
+
+---
+
+### CLM-002 — Weekend hotel stay
+
+* **Employee:** B. Osei
+* **Trip:** 2026-06-14 to 2026-06-15
+* **Submitted:** 2026-06-25
+
+| Category | Description | Amount (USD) | Receipt attached |
+| --- | --- | --- | --- |
+| spa | Hotel spa package | 300.00 | Yes |
+| minibar | In-room minibar | 80.00 | Yes |
+
+* **Total claimed:** $380.00
+
+---
+
+### CLM-003 — Client site visit (business)
+
+* **Employee:** C. Nakamura
+* **Trip:** 2026-06-08 to 2026-06-10
+* **Submitted:** 2026-06-22
+
+| Category | Description | Amount (USD) | Receipt attached |
+| --- | --- | --- | --- |
+| airfare | Round-trip economy airfare | 300.00 | Yes |
+| lodging | Hotel, 2 nights @ $250 | 500.00 | Yes |
+| meals | Meals, 2 days @ $70/day | 140.00 | Yes |
+
+* **Total claimed:** $940.00
+
+---
+
+### CLM-004 — International vendor negotiation (business)
+
+* **Employee:** D. Fischer
+* **Trip:** 2026-06-16 to 2026-06-18
+* **Submitted:** 2026-06-28
+
+| Category | Description | Amount (USD) | Receipt attached |
+| --- | --- | --- | --- |
+| airfare | Business-class international airfare | 2400.00 | Yes |
+| lodging | Hotel, 3 nights | 600.00 | No |
+
+* **Total claimed:** $3000.00
+
+---
+
+### CLM-005 — Client dinner / business development
+
+* **Employee:** E. Haddad
+* **Trip:** 2026-06-11 to 2026-06-11
+* **Submitted:** 2026-06-24
+
+| Category | Description | Amount (USD) | Receipt attached |
+| --- | --- | --- | --- |
+| meals | Client dinner for 4 (business development) | 220.00 | No |
+
+* **Total claimed:** $220.00

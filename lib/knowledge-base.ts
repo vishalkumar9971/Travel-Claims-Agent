@@ -1,157 +1,215 @@
 import { Document, Source } from "./types"
 
-// Pluang Knowledge Base Documents
+// HCL Tech Travel Reimbursement Knowledge Base Documents
 export const knowledgeBase: Document[] = [
   {
     id: "doc-1",
-    title: "Company Background",
-    category: "About Pluang",
-    content: `Pluang is an award-winning multi-asset investment platform, founded in 2018 (originally as a gold-only savings app called Emasdigi). Over time it expanded into a broad investment ecosystem covering stocks, crypto, futures, ETFs, mutual funds and options trading.
+    title: "Eligible & Ineligible Categories",
+    category: "Policy Categories",
+    content: `POL-CAT-01 — Eligible Categories (Reimbursable when incurred for documented business purpose):
+- Airfare (economy class only — see POL-AIR-01)
+- Lodging (hotel room charges)
+- Meals (subject to per-diem limits — see POL-PD-01)
+- Ground transport (taxi, rideshare, train, rental car, parking)
+- Conference / registration fees
 
-Its mission is to democratize access to investing for retail customers by enabling a wide variety of financial products under one platform with low minimums and transparent fees.
+POL-CAT-02 — Ineligible Items (Never reimbursable; rejected in full):
+- Alcohol and minibar charges
+- Spa, gym, and personal entertainment
+- In-room movies, personal shopping, gifts
+- Traffic fines, penalties, and late fees
+- Any personal (non-business) expense
 
-Pluang has grown rapidly and serves more than 11 million+ users across Southeast Asia.`,
+All ineligible items are automatically deducted from the claim and cannot be reimbursed.`,
   },
   {
     id: "doc-2",
-    title: "US Stocks & ETFs",
-    category: "Products",
-    content: `Pluang provides access to US Stocks & ETFs:
-- Access to 650+ stocks & ETFs including major companies like Apple, Microsoft, Meta and more.
-- Fractional shares allow users to invest with small amounts (e.g., from $1).
-- Transaction fee: ~0.30% for regular users, ~0.20% for Pluang Plus members (plus 11% VAT).
-- Regulatory fees (SEC, TAF, CAT) apply for sales.
-- Dividend tax: 15% for regular stock holdings; 30% for leveraged positions.`,
+    title: "Per-Diem and Category Limits",
+    category: "Limits",
+    content: `POL-PD-01 — Meals Per-Diem Limit:
+- Maximum $75 per day
+- Amounts above the daily cap are deducted; the rest is reimbursed
+- Example: If you claim $90 in meals for one day, you get reimbursed $75 and $15 is deducted
+
+POL-PD-02 — Lodging Per-Diem Limit:
+- Maximum $200 per night
+- Amounts above the nightly cap are deducted; the rest is reimbursed
+- Example: Hotel charging $250/night = reimburse $200, deduct $50
+
+POL-PD-03 — Ground Transport Per-Diem Limit:
+- Maximum $50 per day
+- Amounts above the cap are deducted
+
+POL-AIR-01 — Airfare Class Restriction:
+- Only economy class airfare is reimbursable
+- Business/first-class fares are a policy exception and MUST be routed to Manual Review
+- Pre-approval may exist for premium cabin travel`,
   },
   {
     id: "doc-3",
-    title: "Cryptocurrencies & Futures",
-    category: "Products",
-    content: `Pluang offers comprehensive crypto trading:
-- 600+ crypto coins available, including major assets like BTC, ETH, BNB, Solana, XRP.
-- Crypto futures trading (up to 25x leverage) can be accessed for more advanced strategies.
-- Competitive spread plus transparent buy/sell pricing; fees vary by asset.
-- USD Yield (Pluang Cuan): Yield-earning program where users earn interest on crypto holdings like BTC/ETH (competitive APY).`,
+    title: "Receipt Requirements",
+    category: "Documentation",
+    content: `POL-RCT-01 — Receipt Required Above $25:
+- Any single line item greater than $25 requires an attached, itemized receipt
+- Airfare and lodging ALWAYS require a receipt regardless of amount
+- Items under $25 may be accepted without receipt if properly documented
+
+POL-RCT-02 — Missing Receipt Handling:
+- If a receipt is missing for an item that requires one, the item is NOT silently rejected
+- The entire claim is routed to Manual Review so the reviewer can request the receipt
+- Do not auto-approve claims with missing required receipts
+- This protects both the employee and the company`,
   },
   {
     id: "doc-4",
-    title: "Options Trading",
-    category: "Products",
-    content: `Pluang is the first app in Indonesia to offer options trading on US stocks.
-- Options trading enables traders to profit in rising or falling markets.
-- Advanced order types available: Limit, Stop, Stop-Limit, Stop Loss and Take Profit orders for precise entry/exit.
-- Technical charting tools: 50+ indicators and drawing tools via TradingView integration.`,
+    title: "Approval Thresholds and Authority",
+    category: "Approval Process",
+    content: `Approval thresholds are evaluated on the TOTAL reimbursable amount (after per-diem deductions but before final decision).
+
+POL-APR-01 — Auto-Approve Tier:
+- Total reimbursement ≤ $500
+- May be auto-approved by the agent if fully compliant with all policy rules
+- No missing receipts, no ineligible items, no policy exceptions
+
+POL-APR-02 — Manager Tier:
+- Total reimbursement > $500 and ≤ $2,000
+- Eligible for approval by manager when fully compliant
+- Agent can approve if all conditions met
+
+POL-APR-03 — Director / Manual-Review Tier:
+- Total reimbursement > $2,000
+- EXCEEDS the agent's auto-approval authority
+- Must be routed to Manual Review for director approval, EVEN IF otherwise fully compliant
+- High-value claims require human oversight`,
   },
   {
     id: "doc-5",
-    title: "Mutual Funds & Digital Gold",
-    category: "Products",
-    content: `Pluang offers traditional investment options:
-
-Mutual Funds:
-- Over 65 mutual funds across categories like equity, fixed income, and money market.
-- Low admin costs and competitive spreads applied per transaction.
-
-Digital Gold:
-- Digital gold purchase starting from very small amounts (e.g., Rp 10,000).
-- Regulated by Bappebti.`,
+    title: "Timeliness Requirements",
+    category: "Policy Rules",
+    content: `POL-TIME-01 — Submission Window:
+- Claims must be submitted within 30 days of the expense date
+- Late claims are automatically routed to Manual Review
+- The review committee may approve late claims at their discretion if justified
+- Do not auto-reject late claims; send them for manual review with a note about the delay`,
   },
   {
     id: "doc-6",
-    title: "Trading Tools & Features",
-    category: "Features",
-    content: `Pluang includes advanced features for both beginner investors and experienced traders:
+    title: "Decision Framework and Logic",
+    category: "Decision Making",
+    content: `Apply these rules in order when making reimbursement decisions:
 
-Portfolio & Investment Features:
-- Pocket Portfolios: Pre-defined or custom baskets of assets based on themes or strategies (e.g., tech, dividend stocks).
-- Auto-Invest / Dollar-Cost Averaging: Scheduled investing strategy to reduce timing risk and build holdings over time.
+APPROVE — Full reimbursement when:
+- Every item is in an eligible category (POL-CAT-01)
+- All required receipts are present (POL-RCT-01)
+- All amounts are within per-diem caps (POL-PD-01, POL-PD-02, POL-PD-03)
+- Airfare is economy class only (POL-AIR-01)
+- Claim is submitted within 30 days (POL-TIME-01)
+- Total is within auto-approvable tier ≤ $500 (POL-APR-01) or manager-approvable tier ≤ $2,000 (POL-APR-02)
 
-Trading Tools for Advanced Users:
-- Advanced Order Types: Limit, Stop, Stop-Limit, Stop Loss and Take Profit orders.
-- Order Book & Market Depth: Real-time liquidity and trading activity view (especially for crypto).
-- Technical Charting Tools: 50+ indicators and drawing tools via TradingView integration.
-- Leverage Trading: Up to 4x on selected asset classes for amplified exposure.`,
+PARTIALLY APPROVE — when:
+- The claim is valid but some amounts exceed per-diem caps
+- Reimburse up to the applicable caps and deduct the excess
+- All other policy rules are met
+
+REJECT — when:
+- The claimed items are ineligible (POL-CAT-02) with nothing reimbursable
+- The entire claim consists of personal or prohibited expenses
+
+MANUAL REVIEW — Route to manual review when:
+- Any policy exception (e.g., business-class airfare — POL-AIR-01)
+- High value exceeding $2,000 (POL-APR-03)
+- Missing required receipt (POL-RCT-02)
+- Late submission beyond 30 days (POL-TIME-01)
+- Any ambiguity or conflicting information
+- Partial approval needed with unusual circumstances
+
+ALWAYS PREFER MANUAL REVIEW over forcing a decision in ambiguous cases.`,
   },
   {
     id: "doc-7",
-    title: "Fees & Pricing",
-    category: "Fees",
-    content: `Pluang emphasizes fee transparency:
+    title: "Sample Claims for Testing",
+    category: "Examples",
+    content: `CLM-001 — Attend 2-day industry conference (business):
+Employee: A. Rivera | Trip: 2026-06-10 to 2026-06-12 | Submitted: 2026-06-20
+- Airfare (economy): $420.00 (receipt: yes)
+- Lodging (2 nights @ $180): $360.00 (receipt: yes)
+- Meals (3 days @ ~$60/day): $180.00 (receipt: yes)
+- Conference registration: $150.00 (receipt: yes)
+Total claimed: $1,110.00
+Expected Decision: PARTIALLY APPROVE (meals exceed $75/day limit for some days)
 
-US Stocks & ETFs:
-- Transaction fee: ~0.30% for regular users, ~0.20% for Pluang Plus members (plus 11% VAT).
-- Regulatory fees (SEC, TAF, CAT) apply for sales.
-- Dividend tax: 15% for regular stock holdings; 30% for leveraged positions.
+CLM-002 — Weekend hotel stay (personal):
+Employee: B. Osei | Trip: 2026-06-14 to 2026-06-15 | Submitted: 2026-06-25
+- Spa package: $300.00 (receipt: yes)
+- Minibar: $80.00 (receipt: yes)
+Total claimed: $380.00
+Expected Decision: REJECT (all items ineligible — spa and minibar are personal)
 
-Crypto:
-- Competitive spread plus transparent buy/sell pricing; fees vary by asset.
+CLM-003 — Client site visit (business):
+Employee: C. Nakamura | Trip: 2026-06-08 to 2026-06-10 | Submitted: 2026-06-22
+- Airfare (economy): $300.00 (receipt: yes)
+- Lodging (2 nights @ $250): $500.00 (receipt: yes)
+- Meals (2 days @ $70/day): $140.00 (receipt: yes)
+Total claimed: $940.00
+Expected Decision: PARTIALLY APPROVE (lodging exceeds $200/night limit)
 
-Mutual Funds & Gold:
-- Low admin costs and competitive spreads applied per transaction.
+CLM-004 — International vendor negotiation (business):
+Employee: D. Fischer | Trip: 2026-06-16 to 2026-06-18 | Submitted: 2026-06-28
+- Business-class airfare: $2,400.00 (receipt: yes)
+- Lodging (3 nights): $600.00 (receipt: NO)
+Total claimed: $3,000.00
+Expected Decision: MANUAL REVIEW (business-class airfare is exception + missing lodging receipt + exceeds $2,000 threshold)
 
-Account Fees:
-- No deposit or account opening fees.`,
+CLM-005 — Client dinner / business development:
+Employee: E. Haddad | Trip: 2026-06-11 | Submitted: 2026-06-24
+- Client dinner for 4 (business development): $220.00 (receipt: NO)
+Total claimed: $220.00
+Expected Decision: MANUAL REVIEW (missing receipt for meal item $220 > $25 threshold)`,
   },
   {
     id: "doc-8",
-    title: "Pluang Plus Membership",
-    category: "Membership",
-    content: `Pluang Plus is a paid membership program offering:
-- Lower trading fees (e.g., 0.20% vs 0.30% for US stocks)
-- Priority support & servicing
-- Exclusive community features and enhanced tools
-- Access to premium analytics and insights`,
+    title: "Common Decision Examples",
+    category: "FAQ",
+    content: `Q: A meal expense is $80/day but the limit is $75/day. What happens?
+A: PARTIALLY APPROVE. Reimburse $75, deduct $5. Policy cap is firm but partial reimbursement is allowed.
+
+Q: An employee forgot to attach a receipt for a $300 hotel bill. Should we reject it?
+A: NO. Route to MANUAL REVIEW. Per POL-RCT-02, do not silently reject. Ask the employee to provide the receipt.
+
+Q: An employee booked a business-class flight for $2,400. Can we auto-approve it?
+A: NO. Route to MANUAL REVIEW. Per POL-AIR-01, business class requires pre-approval review. Even if everything else is valid.
+
+Q: A claim is submitted 45 days after the trip. What happens?
+A: Route to MANUAL REVIEW. Per POL-TIME-01, claims beyond 30 days go to manual review for possible exception approval.
+
+Q: An employee claims $3,500 total for meals and hotel. All receipts are present and amounts are reasonable. Should we approve?
+A: NO. Route to MANUAL REVIEW. Per POL-APR-03, anything over $2,000 exceeds agent authority and needs director approval.
+
+Q: A claim has one $50 meal receipt (present), one $30 spa charge (no receipt), and $20 parking (no receipt). What decision?
+A: MANUAL REVIEW. The spa is ineligible (POL-CAT-02), so it's deducted. The $30 meal exceeds $25 so needs receipt (it's missing). Result: route to manual review for clarification.`,
   },
   {
     id: "doc-9",
-    title: "Regulation & Security",
-    category: "Safety",
-    content: `Pluang products are regulated under strict Indonesian financial authorities:
+    title: "Policy Contact & Support",
+    category: "Support",
+    content: `For questions about travel reimbursement policy:
+- Email: travel-policy@company.com
+- Policy Handbook: Internal Wiki / Travel Portal
+- HR Help Desk: Extension 5500
 
-Regulatory Bodies:
-- Crypto & Futures: OJK & Bappebti
-- US Stocks & Options: OJK (via PT PG Berjangka)
-- Mutual Funds: OJK (APERD licensed)
-- Gold: Bappebti
-
-Security Standards:
-- ISO/IEC 27001:2013 information security certification.
-- Client funds segregated in licensed custodial accounts.
-- Advanced crypto custody backed by secure technology partners.
-
-Pluang is compliant with Indonesian trading laws; it is not an unregulated or offshore trading platform.`,
-  },
-  {
-    id: "doc-10",
-    title: "Getting Started & Minimum Investment",
-    category: "Getting Started",
-    content: `How much do you need to start investing with Pluang?
-
-Minimums are very low:
-- Crypto and gold: from as little as Rp 10,000
-- US stocks: from ~US$1 (fractional shares)
-- Mutual funds and ETFs: also accessible with small denominations
-
-No deposit or account opening fees required.
-All plans include a 14-day free trial for premium features.`,
-  },
-  {
-    id: "doc-11",
-    title: "FAQ - Common Questions",
-    category: "FAQ",
-    content: `Frequently Asked Questions:
-
-Q: Is Pluang licensed and safe?
-A: Yes — Pluang products are regulated by Indonesian authorities (OJK and Bappebti) and employs industry-standard security and custodial measures.
-
-Q: What assets can I invest in with Pluang?
-A: Users can currently trade crypto, US stocks & ETFs, options, crypto futures, mutual funds, and digital gold.
-
-Q: Are dividends and yields included?
-A: Yes — if you hold eligible US stocks, you may receive dividends (subject to tax). Crypto holdings can earn yields where eligible through Pluang Cuan.
-
-Q: What makes Pluang different?
-A: Pluang offers a single app to manage diverse financial products rather than separate apps for different investments.`,
+Key Policy IDs for Reference:
+- POL-CAT-01: Eligible categories
+- POL-CAT-02: Ineligible categories
+- POL-PD-01: Meals limit ($75/day)
+- POL-PD-02: Lodging limit ($200/night)
+- POL-PD-03: Ground transport limit ($50/day)
+- POL-AIR-01: Airfare class (economy only)
+- POL-RCT-01: Receipt required above $25
+- POL-RCT-02: Missing receipt handling
+- POL-APR-01: Auto-approve tier (≤$500)
+- POL-APR-02: Manager tier (>$500, ≤$2,000)
+- POL-APR-03: Director/Manual review tier (>$2,000)
+- POL-TIME-01: Submission within 30 days`,
   },
 ]
 

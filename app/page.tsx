@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Chat } from "@/lib/types"
+import { Chat, ClaimRecord } from "@/lib/types"
 import { getChats, createChat, deleteChat, getChat } from "@/lib/chat-store"
+import { migrateClaimsFromChats, seedSampleClaims } from "@/lib/claim-store"
 import { ChatSidebar } from "@/components/chat-sidebar"
 import { ChatInterface } from "@/components/chat-interface"
 import { HistoryPanel } from "@/components/history-panel"
@@ -17,10 +18,12 @@ export default function Home() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [historyPanelOpen, setHistoryPanelOpen] = useState(false)
+  const [claims, setClaims] = useState<ClaimRecord[]>([])
 
   // Load chats from localStorage on mount, create default if none exist
   useEffect(() => {
     const storedChats = getChats()
+    setClaims(seedSampleClaims(migrateClaimsFromChats(storedChats)))
     
     if (storedChats.length > 0) {
       // If there are existing chats, select the most recent one
@@ -107,6 +110,7 @@ export default function Home() {
           isCollapsed={sidebarCollapsed}
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
           onOpenHistory={() => setHistoryPanelOpen(true)}
+          claims={claims}
         />
       </div>
 
@@ -130,6 +134,7 @@ export default function Home() {
                 setMobileMenuOpen(false)
                 setHistoryPanelOpen(true)
               }}
+              claims={claims}
             />
           </div>
         </>
@@ -148,7 +153,7 @@ export default function Home() {
 
       {/* Main Chat Area */}
       <main className="flex-1 flex flex-col overflow-hidden">
-        <ChatInterface chat={currentChat} onChatUpdate={handleChatUpdate} />
+        <ChatInterface chat={currentChat} onChatUpdate={handleChatUpdate} onClaimCreated={(claim) => setClaims(current => [claim, ...current.filter(item => item.claimId !== claim.claimId)])} />
       </main>
     </div>
   )

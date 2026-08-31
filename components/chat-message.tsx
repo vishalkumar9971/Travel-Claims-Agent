@@ -6,6 +6,7 @@ import { useState } from "react"
 import { Message, Source } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { User, FileText, ChevronDown, ChevronUp, Bot, X } from "lucide-react"
+import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -163,8 +164,13 @@ export function ChatMessage({ message }: ChatMessageProps) {
           <User className="h-4 w-4" />
         </div>
       ) : (
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-          <Bot className="h-4 w-4" />
+        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-primary-foreground">
+          <DotLottieReact
+            src="https://lottie.host/6bbb225b-8a26-4d03-85a9-04b26d0ac7d9/rflUTnogcq.lottie"
+            loop
+            autoplay
+            style={{ width: "100%", height: "100%" }}
+          />
         </div>
       )}
 
@@ -174,7 +180,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
       )}>
         {!isUser && (
           <div className="font-medium text-sm text-foreground">
-            Pluang Copilot
+            Travel Reimbursement Agent
           </div>
         )}
 
